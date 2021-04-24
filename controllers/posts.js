@@ -74,6 +74,12 @@ postsRouter.get("/api/posts", (request, response) => {
   response.json(posts);
 });
 
+postsRouter.get("/api/notes/:id", (request, response) => {
+  const id = request.params.id;
+  const note = notes.find((note) => note.id === id);
+  response.json(note);
+});
+
 postsRouter.use((request, response) => {
   response.status(404).json({
     error: "Not found",
