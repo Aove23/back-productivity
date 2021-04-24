@@ -76,8 +76,8 @@ postsRouter.get("/api/posts", (request, response) => {
 
 postsRouter.get("/api/notes/:id", (request, response) => {
   const id = request.params.id;
-  const note = notes.find((note) => note.id === id);
-  response.json(note);
+  const post = posts.find((post) => post.id === id);
+  response.json(post);
 });
 
 postsRouter.use((request, response) => {
