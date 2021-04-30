@@ -1,3 +1,6 @@
+require("dotenv").config();
+require("./mongo.js");
+
 const express = require("express");
 const cors = require("cors");
 const postsRouter = require("./controllers/posts");
@@ -11,7 +14,7 @@ app.use(express.json());
 app.use(postsRouter);
 
 //Port
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

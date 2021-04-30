@@ -1,4 +1,5 @@
 const postsRouter = require("express").Router();
+const Post = require("../models/Post");
 
 const posts = [
   {
@@ -36,49 +37,51 @@ const posts = [
     imagen: "https://i.ibb.co/RgtgrZs/day42-imac.png",
     titulo: "Backbonejs",
   },
-  {
-    id: 6,
-    descripcion: "ultima tecnologia web afdafsgdsgdgreherhg",
-    etiquetas: [],
-    imagen: "urlimg",
-    titulo: "Nextjs",
-  },
-  {
-    id: 7,
-    descripcion: "ultima tecnologia web afdafsgdsgdgreherhg",
-    etiquetas: [],
-    imagen: "urlimg",
-    titulo: "Gatsbyjs",
-  },
-  {
-    id: 8,
-    descripcion: "ultima tecnologia web afdafsgdsgdgreherhg",
-    etiquetas: [],
-    imagen: "urlimg",
-    titulo: "Nodejs",
-  },
-  {
-    id: 9,
-    descripcion: "ultima tecnologia web afdafsgdsgdgreherhg",
-    etiquetas: [],
-    imagen: "urlimg",
-    titulo: "JavaScript",
-  },
 ];
 
 postsRouter.get("/", (request, response) => {
   response.send("Hello Expressjs!");
 });
 
-postsRouter.get("/api/posts", (request, response) => {
+postsRouter.get("/api/posts", async (request, response) => {
+  const posts = await Post.find({});
   response.json(posts);
 });
 
-postsRouter.get("/api/posts/:id", (request, response) => {
-  const id = request.params.id;
-  const post = posts.find((post) => post.id === id);
-  response.json(post);
+postsRouter.post("/api/posts", async (request, response) => {
+  const body = request.body;
+  const { titulo, descripcion, imagen, etiquetas } = body;
+
+  if (
+    titulo === "" ||
+    titulo === undefined ||
+    descripcion === "" ||
+    descripcion === undefined
+  ) {
+    return response.status(400).json({ error: "content missing" });
+  }
+
+  const post = new Post({
+    descripcion: descripcion,
+    etiquetas: etiquetas,
+    imagen: imagen,
+    titulo: titulo,
+    fecha: new Date(),
+  });
+
+  try {
+    const savedPost = await post.save();
+    response.json(savedPost);
+  } catch (err) {
+    console.log(err);
+  }
 });
+
+// postsRouter.get("/api/posts/:id", (request, response) => {
+//   const id = Number(request.params.id);
+//   const post = posts.find((post) => post.id === id);
+//   response.json(post);
+// });
 
 postsRouter.use((request, response) => {
   response.status(404).json({
