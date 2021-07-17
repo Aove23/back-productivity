@@ -39,16 +39,16 @@ const posts = [
   },
 ];
 
-postsRouter.get("/", (request, response) => {
-  response.send("Hello Expressjs!");
-});
+// postsRouter.get("/", (request, response) => {
+//   response.send("Hello Expressjs!");
+// });
 
-postsRouter.get("/api/posts", async (request, response) => {
+postsRouter.get("/", async (request, response) => {
   const posts = await Post.find({});
   response.json(posts);
 });
 
-postsRouter.post("/api/posts", async (request, response) => {
+postsRouter.post("/", async (request, response, next) => {
   const body = request.body;
   const { titulo, descripcion, imagen, etiquetas } = body;
 
@@ -73,6 +73,7 @@ postsRouter.post("/api/posts", async (request, response) => {
     const savedPost = await post.save();
     response.json(savedPost);
   } catch (err) {
+    next(err);
     console.log(err);
   }
 });
@@ -82,11 +83,5 @@ postsRouter.post("/api/posts", async (request, response) => {
 //   const post = posts.find((post) => post.id === id);
 //   response.json(post);
 // });
-
-postsRouter.use((request, response) => {
-  response.status(404).json({
-    error: "Not found",
-  });
-});
 
 module.exports = postsRouter;
