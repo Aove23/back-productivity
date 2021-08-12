@@ -7,6 +7,7 @@ const courseSchema = new Schema({
   etiquetas: [String],
   detalles: [String],
   content: [String],
+  category: String,
   price: Number,
 });
 
