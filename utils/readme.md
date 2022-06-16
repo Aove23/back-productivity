@@ -24,3 +24,30 @@ Objetos Cursos ejemplos
 "content":["modulo1","modulo2"],
 "price":1800
 }
+
+Usuario DEV:
+{
+"email": "aoveliz.23@gmail.com",
+"username":"Aove23",
+"password": "agustinoveliz"
+}
+
+Usuario TEST:
+{
+"email": "aoveliz.23@gmail.com",
+"username":"Aove23",
+"password": "agustinoveliz"
+}
+
+Nuevo esquema de Usuarios:
+email: String,
+  username: String,
+  passwordHash: String,
+  auth: String,
+  avatar: String,
+  courses: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Course",
+    },
+  ],

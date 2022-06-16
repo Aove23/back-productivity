@@ -3,19 +3,22 @@ const checkoutRouter = require("express").Router();
 const Course = require("../models/Course");
 
 mercadopago.configure({
-  access_token: "TEST-a74efbec-5589-4617-9391-0c6db1d98f31",
+  access_token:
+    "TEST-6937998183824794-092819-d55f27e1697f4ca2a5411c043faa7c32-404757742",
 });
 
 checkoutRouter.post("/", async (request, response) => {
   const body = request.body;
-  const { id } = body;
+  const { id, value } = body;
+  const valueNumber = Number(value);
 
-  let curso;
-  try {
-    curso = await Course.findById(id);
-  } catch (err) {
-    response.json({ error: err });
-  }
+  // let curso;
+  // try {
+  //   curso = await Course.findById(id);
+  //   conasole.log("CURSO", curso);
+  // } catch (err) {
+  //   response.json({ error: err });
+  // }
 
   // Se valida nuevamente si el curso existe, deberia mandarse al handleError
 
@@ -23,24 +26,26 @@ checkoutRouter.post("/", async (request, response) => {
   //   return response.json({err: "Este curso no esta disponible"})
   // }
 
-  const { titulo, price, descripcion } = curso;
-  let objItem = { title: titulo, unit_price: price, quantity: 1, id: id };
+  // const { titulo, price, descripcion } = curso;
+  let objItem = { title: "Hola Mundo", unit_price: valueNumber, quantity: 1, id: id };
 
   let preference = {
     items: [objItem],
-    back_urls: {
-      success: "http://localhost:5000/feedback",
-      failure: "http://localhost:5000/feedback",
-      pending: "http://localhost:5000/feedback",
-    },
-    auto_return: "approved",
+    // back_urls: {
+    //   success: "http://localhost:5000/feedback",
+    //   failure: "http://localhost:5000/feedback",
+    //   pending: "http://localhost:5000/feedback",
+    // },
+    // auto_return: "approved",
   };
 
-  console.log(preference);
+  // console.log(preference);
 
   try {
     const res = await mercadopago.preferences.create(preference);
-    response.json({ id: res.body.id });
+    console.log("RES-BODY *****", res.body);
+    console.log("RES *****", res.body.id);
+    response.json({ preferenciaId: res.body.id });
   } catch (err) {
     console.log(err);
   }

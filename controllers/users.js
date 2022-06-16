@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const usersRouter = require("express").Router();
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 // const userExtractor = require("../middlewares/userExtractor");
 
 const getTokenFrom = (request) => {
@@ -39,14 +39,22 @@ usersRouter.get("/", async (request, response) => {
 });
 
 usersRouter.post("/", async (request, response) => {
+  // Hay que validar que el usuario no exista en DB
+  // const user = await User.findOne({ email });
+  // console.log(user);
+  const flagRegister = "Register by credentials"
   const body = request.body;
+
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
   const user = new User({
-    username: body.username,
+    email: body.email,
     name: body.name,
+    lastName: body.lastName,
+    auth: flagRegister,
+    avatar: body.avatar || null,
     passwordHash,
   });
 

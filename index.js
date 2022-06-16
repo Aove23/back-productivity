@@ -23,7 +23,7 @@ app.use("/api/courses", coursesRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/add", addRouter);
-app.use("/api/course", checkoutRouter);
+app.use("/api/donate", checkoutRouter);
 
 //Middlewares Errors
 app.use(notFound);
